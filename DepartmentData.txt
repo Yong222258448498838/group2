@@ -1,0 +1,7 @@
+6322,Computer,M1,Liep Sokkeang,90,98,97,285,95,A
+4918,Computer,M1,Sok Hong,76,56,48,180,60,D
+7470,Computer,M1,Noun Molyka,80,79,68,227,75.6667,C
+6992,Computer,M2,Ly Sokheang,78,67,87,232,77.3333,C
+9226,Computer,M2,Mang Chansiha,78,98,76,252,84,B
+2738,Computer,M2,Chan Reaksmey,80,58,90,228,76,C
+7397,Computer,M1,Yan Nary,56,45,60,161,53.6667,E
