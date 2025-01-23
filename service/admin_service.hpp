@@ -58,6 +58,7 @@ private:
     double scorePhyton;
 
 public:
+    
     DepartmentOfComputer() : id(0), departmentName(""), classs(""), studentName(""), scoreCpp(0), scoreMath(0), scorePhyton(0) {}
 
     DepartmentOfComputer(const unordered_set<int>& existingIDs)
@@ -83,7 +84,6 @@ public:
 
     double totalScore() const { return scoreCpp + scoreMath + scorePhyton; }
     double average() const { return totalScore() / 3; }
-
     string levels() const {
         double avg = average();
         if (avg >= 90) return "A";
@@ -149,7 +149,9 @@ vector<DepartmentOfComputer> readFromFile() {
 }
 
 void addDepartmentOfComputer() {
-    auto existingIDs = readExistingIDs("DepartmentData.txt");
+    char option;
+    do{
+        auto existingIDs = readExistingIDs("DepartmentData.txt");
     DepartmentOfComputer departmentOfComputer(existingIDs);
     
     double scoreCpp,scoreMath,scorePhyton;
@@ -180,6 +182,11 @@ void addDepartmentOfComputer() {
     departmentOfComputers.push_back(departmentOfComputer);
     writeToFile(departmentOfComputers);
     cout << "\t\t\t\t\t DepartmentOfComputer added successfully.\n";
+    cout<<"\t\t\t\t\t----------------------------------------------------\n";
+    cout << "\t\t\t\t\t Do you want to add more Student?(Y/N): ";
+                cin >> option;
+            }while((option == 'Y' || option == 'y' ));
+    
     
 }
 
@@ -197,31 +204,39 @@ void displayAllDepartmentOfComputers() {
       
         data.push_back({to_string(DepartmentOfComputer.getid()), DepartmentOfComputer.getdepartmentName(), DepartmentOfComputer.getclasss(), DepartmentOfComputer.getstudentName(), to_string(DepartmentOfComputer.getscoreCpp()), to_string(DepartmentOfComputer.getscoreMath()), to_string(DepartmentOfComputer.getscorePhyton()), to_string(DepartmentOfComputer.totalScore()), to_string(DepartmentOfComputer.average()), DepartmentOfComputer.levels()});
 } 
-vector<string>columnNames ={ "ID","Department Name","Class","Student Name","ScoreCpp", "ScoreMath","ScorePhyton","Total Score", "Average","Levels"};
+vector<string>columnNames ={ "ID","Department Name","Class","Student Name","ScoreC++", "ScoreMath","ScorePython","Total Score", "Average","Levels"};
 printTable(data, columnNames);
 }
 
 void searchDepartmentOfComputerByID() {
     int id;
+    char option;
+    do{
     cout << "\t\t\t\t\t Enter Student ID to search: ";
     cin >> id;
-vector<vector<string>> data;
+    vector<vector<string>> data;
     auto DepartmentOfComputers = readFromFile();
     for (const auto& DepartmentOfComputer : DepartmentOfComputers) {
         if (DepartmentOfComputer.getid() == id) {
             data.push_back({to_string(DepartmentOfComputer.getid()), DepartmentOfComputer.getdepartmentName(), DepartmentOfComputer.getclasss(), DepartmentOfComputer.getstudentName(), to_string(DepartmentOfComputer.getscoreCpp()), to_string(DepartmentOfComputer.getscoreMath()), to_string(DepartmentOfComputer.getscorePhyton()), to_string(DepartmentOfComputer.totalScore()), to_string(DepartmentOfComputer.average()), DepartmentOfComputer.levels()});
-} 
-vector<string>columnNames ={ "ID","Department Name","Class","Student Name","ScoreCpp", "ScoreMath","ScorePhyton","Total Score", "Average","Levels"};
-printTable(data, columnNames);
-             return;
         }
+    }
+    vector<string> columnNames = { "ID", "Department Name", "Class", "Student Name", "ScoreC++", "ScoreMath", "ScorePython", "Total Score", "Average", "Levels" };
+    printTable(data, columnNames);
+    if (data.empty()) {
+        cout << "\t\t\t\t\t Student ID: " << id << " not found.\n";
+    }
+    cout << "\t\t\t\t\t Do you want to search more student ?(Y/N): ";
+                cin >> option;
+    }while((option == 'Y' || option == 'y' ));
     
-    cout << "\t\t\t\t\t studenrt ID :" << id << " not found.\n";
 }
 
 void deleteDepartmentOfComputerByID() {
     int id;
-    cout << "\t\t\t\t\t Enter student ID to delete: ";
+    char option;
+    do{
+        cout << "\t\t\t\t\t Enter student ID to delete: ";
     cin >> id;
     auto DepartmentOfComputers = readFromFile();
     auto it = remove_if(DepartmentOfComputers.begin(), DepartmentOfComputers.end(), [id](const DepartmentOfComputer& s) { return s.getid() == id; });
@@ -232,6 +247,10 @@ void deleteDepartmentOfComputerByID() {
     } else {
         cout << "\t\t\t\t\t Student ID: " << id << " \t not found.\n";
     }
+    cout<<"\t\t\t\t\t ----------------------------------------------------\n";
+    cout << "\t\t\t\t\t Do you want to delete more student?(Y/N): ";
+                cin >> option;
+    }while((option == 'Y' || option == 'y' ));
 }
 
 void updateDepartmentOfComputerByID() {
@@ -243,14 +262,48 @@ void updateDepartmentOfComputerByID() {
     string studentName;
     string departmentName;
     string classs;
+    char option;
    
-cout << "\t\t\t\t\t Enter Student ID to update: ";
+do{
+    cout<<"\n";
+    int num;
+cout<<"\t\t\t\t\t  ||=======================================================||"<<endl;
+cout<<"\t\t\t\t\t  ||           1. Update student score                     ||"<<endl;
+cout<<"\t\t\t\t\t  ||           2. Update student record                    ||"<<endl;
+cout<<"\t\t\t\t\t  ||=======================================================||"<<endl;
+cout<<"\t\t\t\t\t Choose number for update: ";cin>>num;
+ 
+    cout << "\t\t\t\t\t Enter Student ID to update: ";
 cin >> id;
+if(num==1){
+    auto departmentOfComputers = readFromFile();
+auto it = find_if(departmentOfComputers.begin(), departmentOfComputers.end(), [id](const DepartmentOfComputer& s) { return s.getid() == id; });
+if (it != departmentOfComputers.end()) {
+    DepartmentOfComputer& departmentOfComputer = *it;
+    cout << "\t\t\t\t\t Updating information for Student: " << id << endl;
+    cin.ignore();
+    cout << "\t\t\t\t\t Enter score C++: ";
+    cin >> scoreCpp;
+    cout << "\t\t\t\t\t Enter Score Math: ";
+    cin >> scoreMath;
+    cout << "\t\t\t\t\t Enter Score Phyton: ";
+    cin >> scorePhyton;
+    departmentOfComputer.setCpp(scoreCpp);
+    departmentOfComputer.setMath(scoreMath);
+    departmentOfComputer.setPhyton(scorePhyton);
 
+    writeToFile(departmentOfComputers);
+    cout << "\t\t\t\t\t student updated successfully.\n";
+    return;
+}
+}
+else if(num==2){
 auto departmentOfComputers = readFromFile();
 auto it = find_if(departmentOfComputers.begin(), departmentOfComputers.end(), [id](const DepartmentOfComputer& s) { return s.getid() == id; });
 if (it != departmentOfComputers.end()) {
     DepartmentOfComputer& departmentOfComputer = *it;
+    cout << "\t\t\t\t\t Updating information for Student: " << id << endl;
+    cin.ignore();
 
     cout << "\t\t\t\t\t Inter Department Name: ";
     cin.ignore();
@@ -259,7 +312,7 @@ if (it != departmentOfComputers.end()) {
     getline(cin, classs);
     cout << "\t\t\t\t\t Enter Name Student: ";
     getline(cin, studentName);
-    cout << "\t\t\t\t\t Enter score Cpp: ";
+    cout << "\t\t\t\t\t Enter score C++: ";
     cin >> scoreCpp;
     cout << "\t\t\t\t\t Enter Score Math: ";
     cin >> scoreMath;
@@ -277,7 +330,14 @@ if (it != departmentOfComputers.end()) {
     cout << "\t\t\t\t\t student updated successfully.\n";
     return;
 }
+}
 
 cout << "\t\t\t\t\t Student ID: " << id << " not found.\n";
+cout<<"\t\t\t\t\t ----------------------------------------------------\n";
+cout << "\t\t\t\t\t Do you want to update more student?(Y/N): ";
+                cin >> option;
+    }while((option == 'Y' || option == 'y' ));
 
 }
+
+
